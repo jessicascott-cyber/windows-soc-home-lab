@@ -1,78 +1,55 @@
-# Windows SOC Home Lab
+# Windows Security Monitoring Lab — Splunk SIEM
 
-## Overview
+## Project Overview
+Built a virtualized SOC lab using Splunk Enterprise and
+Splunk Universal Forwarder to collect and analyze Windows
+Security Event Logs.
 
-This project documents the development of a Windows-based cybersecurity home lab designed to build hands-on skills relevant to a Security Operations Center (SOC) Analyst role.
+## Lab Architecture
+SOC-Windows
+      ↓
+Splunk Universal Forwarder
+      ↓
+Host-Only Network
+      ↓
+SOC-Splunk (Ubuntu)
+      ↓
+Splunk Enterprise
+      ↓
+Security Event Analysis
 
-The lab is being used to practice endpoint monitoring, Windows event log analysis, system activity investigation, and security monitoring using Sysmon.
+## Technologies Used
+- Splunk Enterprise 10.4.2
+- Splunk Universal Forwarder 10.4.2
+- Ubuntu 24.04 LTS
+- Windows
+- VirtualBox
+- Windows Event Logs
+- PowerShell
+- SPL (Splunk Search Processing Language)
 
 ## Objectives
+- Deploy a Splunk SIEM environment
+- Configure Windows log collection
+- Forward Windows Security Events to Splunk
+- Verify log ingestion
+- Investigate authentication events
+- Create security detections
 
-* Build and configure a virtualized Windows environment
-* Learn how Windows security events are generated and recorded
-* Configure Sysmon for enhanced system monitoring
-* Practice analyzing Windows event logs
-* Identify potentially suspicious system activity
-* Develop basic security investigation and incident documentation skills
+## Results
+Successfully configured Windows Security Event Logs
+to be collected by Splunk and verified log ingestion
+through Splunk Search & Reporting.
 
-## Tools & Technologies
+## Investigations
+- Failed Windows logons (Event ID 4625)
+- Successful logons (Event ID 4624)
+- Privileged logons (Event ID 4672)
+- Process creation (Event ID 4688)
 
-* Windows
-* VirtualBox
-* Sysmon
-* Windows Event Viewer
-* PowerShell
-* TCP/IP Networking
-
-## Lab Environment
-
-The lab consists of a Windows virtual machine running inside VirtualBox.
-
-### Current Configuration
-
-* Operating System: Windows
-* Virtualization Platform: Oracle VirtualBox
-* Sysmon: Installed and running
-* Network Configuration: NAT
-* IPv4 Address: 10.0.2.15
-
-## Skills Being Developed
-
-* Windows system administration
-* Endpoint monitoring
-* Event log analysis
-* Security event investigation
-* Process monitoring
-* Network fundamentals
-* Incident documentation
-* SOC investigation methodology
-
-## Project Progress
-
-### Phase 1 — Lab Setup
-
-* [x] Create Windows virtual machine
-* [x] Install Windows
-* [x] Configure networking
-* [x] Install Sysmon
-* [x] Verify Sysmon is running
-
-### Phase 2 — Security Monitoring
-
-* [ ] Generate test security events
-* [ ] Analyze Windows Event Viewer
-* [ ] Identify relevant Sysmon events
-* [ ] Investigate suspicious process activity
-* [ ] Document investigation findings
-
-### Phase 3 — SOC Investigation
-
-* [ ] Create simulated security scenarios
-* [ ] Analyze indicators of compromise (IOCs)
-* [ ] Document investigation methodology
-* [ ] Create incident response reports
-* [ ] Develop basic detection rules
-
-## Disclaimer
-
-This project is conducted in an isolated personal lab environment for educational and cybersecurity skill development purposes. No unauthorized systems or networks are targeted.
+## Future Improvements
+- Create Splunk dashboards
+- Build brute-force detection
+- Generate controlled security events
+- Add alerting
+- Document investigation findings
