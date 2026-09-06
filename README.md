@@ -28,6 +28,8 @@ Splunk Enterprise
      |
      v
 Security Event Analysis
+```
+
 ## Technologies Used
 
 - Splunk Enterprise 10.4.2
@@ -36,7 +38,6 @@ Security Event Analysis
 - Windows 11
 - Oracle VirtualBox
 - Windows Security Event Logs
-- PowerShell
 - SPL (Splunk Search Processing Language)
 
 ## Project Objectives
@@ -73,3 +74,101 @@ The following SPL query was used to identify failed Windows logon events:
 index=* EventCode=4625
 | table _time host Account_Name Account_Domain Failure_Reason Logon_Type Source_Network_Address
 | sort - _time
+```
+
+### Splunk Search — Repeated Failed Attempts
+
+The following query was used to identify repeated authentication attempts:
+
+```spl
+index=* EventCode=4625
+| stats count as failed_attempts earliest(_time) as first_attempt latest(_time) as last_attempt by Account_Name Source_Network_Address
+| where failed_attempts >= 3
+| sort - failed_attempts
+```
+
+## Findings
+
+The investigation identified repeated failed authentication attempts involving the following accounts:
+
+- `FakeUser`
+- `SOCAdmin`
+
+Three failed attempts were observed for each account.
+
+The source address associated with the events was:
+
+```text
+::1
+```
+
+The Windows failure reason was:
+
+```text
+Unknown user name or bad password.
+```
+
+The events occurred within a short period of time.
+
+Further review of the Windows Security Event 4625 details showed that the authentication attempt involving `FakeUser` was initiated locally under the `SOCAdmin` account.
+
+## Analysis
+
+The repeated authentication failures initially appeared suspicious because multiple failed attempts occurred within a short period.
+
+However, the source address `::1` is the IPv6 loopback address, which indicates that the activity originated from the local system rather than an external network address.
+
+The activity was generated intentionally as part of a controlled security lab exercise. Based on the available evidence, the activity was classified as benign test activity rather than a confirmed security incident.
+
+This investigation demonstrated the importance of reviewing the full event details and surrounding context before classifying an authentication alert as malicious.
+
+## Recommended Actions
+
+- Verify whether the authentication attempts were intentional.
+- Review the affected account and authentication source.
+- Continue monitoring for additional failed logon events.
+- Investigate further if the number of attempts increases.
+- Investigate further if authentication attempts begin originating from an external address.
+- Correlate authentication activity with other security events when additional evidence is available.
+
+## Evidence
+
+Screenshots from the investigation are included in the `screenshots` folder.
+
+The evidence includes:
+
+1. Windows Security Event ID 4625
+2. Splunk failed logon search results
+3. Splunk results showing repeated failed attempts
+4. Expanded Windows Security Event 4625 details
+
+## Skills Demonstrated
+
+- SIEM monitoring
+- Splunk Enterprise
+- SPL query development
+- Windows Security Event Log analysis
+- Event ID 4625 investigation
+- Authentication investigation
+- Security event triage
+- Evidence analysis
+- Incident assessment
+- Security documentation
+
+## Results
+
+Successfully collected Windows Security Event Logs from the Windows 11 virtual machine into Splunk Enterprise.
+
+Used Splunk SPL to identify repeated failed authentication attempts and analyzed the associated Windows Security Event 4625 details.
+
+The investigation demonstrated the following SOC workflow:
+
+**Detect → Investigate → Analyze → Assess → Recommend**
+
+## Future Improvements
+
+- Create additional Splunk security detections
+- Build a basic SOC dashboard
+- Add alerting for repeated authentication failures
+- Investigate additional Windows Security Event IDs
+- Expand the lab with additional simulated security events
