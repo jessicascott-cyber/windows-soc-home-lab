@@ -89,28 +89,14 @@ index=* EventCode=4625
 
 ## Findings
 
-The investigation identified repeated failed authentication attempts involving the following accounts:
+The search returned **3 failed logon events (Event ID 4625)** within about 30 seconds.
 
-- `FakeUser`
-- `SOCAdmin`
+Each 4625 event records two account names: the account that made the request and the account that was targeted.
 
-Three failed attempts were observed for each account.
+- **Account that made the request:** `SOCAdmin` (the local session I was signed in to)
+- **Account that was targeted:** `FakeUser` (a made-up account I tried to log on as)
 
-The source address associated with the events was:
-
-```text
-::1
-```
-
-The Windows failure reason was:
-
-```text
-Unknown user name or bad password.
-```
-
-The events occurred within a short period of time.
-
-Further review of the Windows Security Event 4625 details showed that the authentication attempt involving `FakeUser` was initiated locally under the `SOCAdmin` account.
+The logon type was 2 (interactive), the source address was `::1` (the IPv6 loopback address), and the failure reason was `Unknown user name or bad password.`
 
 ## Analysis
 
